@@ -1,0 +1,189 @@
+[
+  {
+    "id": "1",
+    "name": "ripgrep",
+    "category": "CLI Tool",
+    "tags": ["Rust", "Search", "Performance"],
+    "officialSite": "https://github.com/BurntSushi/ripgrep",
+    "githubUrl": "https://github.com/BurntSushi/ripgrep",
+    "description": "正規表現で高速にファイル検索できるgrep代替ツール。Rustで書かれており、grepより圧倒的に高速。",
+    "installations": [
+      {
+        "id": "inst-1",
+        "os": "Ubuntu 22.04",
+        "installMethod": "apt",
+        "commands": "sudo apt update\nsudo apt install ripgrep",
+        "configFiles": "~/.ripgreprc",
+        "configNotes": "設定ファイルを作成してデフォルトオプションを指定可能\n\n例:\n--smart-case\n--hidden\n--glob=!.git/*",
+        "installedAt": "2024-01-15",
+        "notes": "Ubuntu 22.04以降なら標準リポジトリから直接インストール可能"
+      },
+      {
+        "id": "inst-2",
+        "os": "macOS",
+        "installMethod": "brew",
+        "commands": "brew install ripgrep",
+        "configFiles": "~/.ripgreprc",
+        "installedAt": "2024-03-10"
+      },
+      {
+        "id": "inst-3",
+        "os": "Arch Linux",
+        "installMethod": "pacman",
+        "commands": "sudo pacman -S ripgrep",
+        "installedAt": "2024-02-20"
+      }
+    ],
+    "usage": {
+      "commonCommands": [
+        {
+          "id": "cmd-1",
+          "command": "rg \"pattern\"",
+          "description": "カレントディレクトリ以下を再帰的に検索"
+        },
+        {
+          "id": "cmd-2",
+          "command": "rg \"pattern\" --type rust",
+          "description": "Rustファイルのみ検索"
+        },
+        {
+          "id": "cmd-3",
+          "command": "rg -i \"case insensitive\"",
+          "description": "大文字小文字を無視して検索"
+        },
+        {
+          "id": "cmd-4",
+          "command": "rg \"TODO\" -g \"!test/\"",
+          "description": "testディレクトリを除外して検索"
+        },
+        {
+          "id": "cmd-5",
+          "command": "rg --files | rg \\.rs$",
+          "description": "Rustファイル一覧を表示"
+        }
+      ],
+      "tips": "- .gitignoreを自動で尊重してくれる\n- grepやagより圧倒的に速い\n- --typeで言語を指定すると便利（rust, python, jsなど）\n- --hidden で隠しファイルも検索\n- --smart-case で賢く大文字小文字を判定"
+    },
+    "notes": "開発時の必須ツール。大きなコードベースでも一瞬で検索できる。",
+    "createdAt": "2024-03-15T10:00:00.000Z",
+    "updatedAt": "2024-03-15T10:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "name": "neovim",
+    "category": "Editor",
+    "tags": ["Vim", "Editor", "Lua"],
+    "officialSite": "https://neovim.io/",
+    "githubUrl": "https://github.com/neovim/neovim",
+    "description": "Vimのフォーク。Luaで拡張可能で、非同期処理やLSP対応が標準装備。",
+    "installations": [
+      {
+        "id": "inst-4",
+        "os": "Ubuntu 22.04",
+        "installMethod": "apt",
+        "commands": "sudo apt install neovim",
+        "configFiles": "~/.config/nvim/init.lua",
+        "configNotes": "Lua形式の設定ファイルを使用\n\nmkdir -p ~/.config/nvim\nvim ~/.config/nvim/init.lua\n\nプラグインマネージャーはLazy.nvimがおすすめ",
+        "installedAt": "2024-01-10",
+        "notes": "aptのバージョンは古いことが多い。最新版が必要な場合はAppImageを使う"
+      },
+      {
+        "id": "inst-5",
+        "os": "macOS",
+        "installMethod": "brew",
+        "commands": "brew install neovim",
+        "configFiles": "~/.config/nvim/init.lua",
+        "installedAt": "2024-02-05"
+      }
+    ],
+    "usage": {
+      "commonCommands": [
+        {
+          "id": "cmd-6",
+          "command": "nvim",
+          "description": "Neovimを起動"
+        },
+        {
+          "id": "cmd-7",
+          "command": "nvim file.txt",
+          "description": "ファイルを開く"
+        },
+        {
+          "id": "cmd-8",
+          "command": ":checkhealth",
+          "description": "環境の健全性チェック（Neovim内で実行）"
+        },
+        {
+          "id": "cmd-9",
+          "command": ":Lazy",
+          "description": "プラグインマネージャー起動（Lazy.nvim使用時）"
+        }
+      ],
+      "tips": "- Lazy.nvimでプラグイン管理が快適\n- LSPを設定すればVSCode並みの補完が可能\n- Telescopeでファジーファインダーを導入すると便利\n- init.luaはGitで管理してdotfilesに入れておく"
+    },
+    "notes": "設定に時間がかかるが、一度環境を整えれば最強のエディタ。",
+    "createdAt": "2024-03-15T10:05:00.000Z",
+    "updatedAt": "2024-03-15T10:05:00.000Z"
+  },
+  {
+    "id": "3",
+    "name": "docker",
+    "category": "Container",
+    "tags": ["Container", "DevOps", "Infrastructure"],
+    "officialSite": "https://www.docker.com/",
+    "githubUrl": "https://github.com/docker",
+    "description": "コンテナ仮想化プラットフォーム。アプリケーションとその依存関係を隔離して実行できる。",
+    "installations": [
+      {
+        "id": "inst-6",
+        "os": "Ubuntu 22.04",
+        "installMethod": "公式スクリプト",
+        "commands": "# Docker公式リポジトリを追加\ncurl -fsSL https://get.docker.com -o get-docker.sh\nsudo sh get-docker.sh\n\n# ユーザーをdockerグループに追加\nsudo usermod -aG docker $USER\n\n# 再ログイン後、動作確認\ndocker --version",
+        "configFiles": "/etc/docker/daemon.json",
+        "configNotes": "daemon.jsonでDockerデーモンの設定を変更可能\n\n例: ログドライバーやストレージドライバーの設定",
+        "installedAt": "2024-01-20",
+        "notes": "再ログインしないとdockerグループが反映されないので注意"
+      },
+      {
+        "id": "inst-7",
+        "os": "macOS",
+        "installMethod": "Docker Desktop",
+        "commands": "# Docker Desktopをダウンロードしてインストール\n# https://www.docker.com/products/docker-desktop\n\n# または Homebrew Cask\nbrew install --cask docker",
+        "installedAt": "2024-02-15"
+      }
+    ],
+    "usage": {
+      "commonCommands": [
+        {
+          "id": "cmd-10",
+          "command": "docker ps",
+          "description": "実行中のコンテナ一覧"
+        },
+        {
+          "id": "cmd-11",
+          "command": "docker images",
+          "description": "ローカルのイメージ一覧"
+        },
+        {
+          "id": "cmd-12",
+          "command": "docker run -it ubuntu bash",
+          "description": "Ubuntuコンテナを起動してbashに入る"
+        },
+        {
+          "id": "cmd-13",
+          "command": "docker-compose up -d",
+          "description": "docker-compose.ymlからサービスを起動"
+        },
+        {
+          "id": "cmd-14",
+          "command": "docker system prune -a",
+          "description": "未使用のイメージ・コンテナを全削除"
+        }
+      ],
+      "tips": "- docker-composeを使うと複数コンテナの管理が楽\n- .dockerignoreで不要なファイルをビルドから除外\n- マルチステージビルドでイメージサイズを削減\n- ボリュームマウントで開発時のホットリロードを実現"
+    },
+    "notes": "開発環境の構築・共有に必須。本番デプロイでも使える。",
+    "createdAt": "2024-03-15T10:10:00.000Z",
+    "updatedAt": "2024-03-15T10:10:00.000Z"
+  }
+]
