@@ -24,7 +24,9 @@ cd devtools-registry
 mkdir data
 chmod 777 data
 
-# DBファイル初期化
+# DBファイル初期化（sqlite3が必要）
+# Ubuntu/Debian: sudo apt install sqlite3
+# macOS: brew install sqlite3
 touch data/dev.db
 sqlite3 data/dev.db < prisma/migrations/20240315000000_init/migration.sql
 
