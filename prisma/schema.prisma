@@ -10,6 +10,7 @@ datasource db {
 
 model Tool {
   id            String   @id @default(cuid())
+  slug          String   @unique
   name          String
   category      String
   tags          String

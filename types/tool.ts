@@ -1,5 +1,6 @@
 export interface Tool {
   id: string;
+  slug: string;
   name: string;
   category: string;
   tags: string[];

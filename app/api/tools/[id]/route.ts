@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { Tool } from '@/types/tool';
+import { generateUniqueSlug } from '@/lib/slugify';
 
 export async function PUT(
   request: Request,
@@ -10,9 +11,13 @@ export async function PUT(
     const { id } = await context.params;
     const tool: Tool = await request.json();
 
+    // 名前が変更された場合はslugも更新
+    const slug = generateUniqueSlug(tool.name, tool.id);
+
     const updated = await prisma.tool.update({
       where: { id },
       data: {
+        slug,
         name: tool.name,
         category: tool.category,
         tags: JSON.stringify(tool.tags),
@@ -38,7 +43,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await context.params;
-    
+
     await prisma.tool.delete({
       where: { id },
     });

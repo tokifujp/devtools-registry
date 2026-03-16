@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { Tool } from '@/types/tool';
+import { generateUniqueSlug } from '@/lib/slugify';
 
 export async function GET() {
   try {
@@ -26,9 +27,13 @@ export async function POST(request: Request) {
   try {
     const tool: Tool = await request.json();
 
+    // slugを生成（IDを使って一意性を保証）
+    const slug = generateUniqueSlug(tool.name, tool.id);
+
     const created = await prisma.tool.create({
       data: {
         id: tool.id,
+        slug,
         name: tool.name,
         category: tool.category,
         tags: JSON.stringify(tool.tags),

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Plus, Search, Download, Upload, Trash2, Edit, ExternalLink, Github } from 'lucide-react';
 import { Tool } from '@/types/tool';
 import { useSession, signIn } from 'next-auth/react';
@@ -227,12 +228,12 @@ export default function Home() {
               <div key={tool.id} className="card hover:shadow-md transition-shadow">
                 <div className="flex justify-between items-start mb-3">
                   <div className="flex-1">
-                    <h3
-                      className="text-xl font-semibold mb-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400"
-                      onClick={() => setDetailTool(tool)}
+                    <Link
+                      href={`/tools/${tool.slug}`}
+                      className="text-xl font-semibold mb-1 hover:text-blue-600 dark:hover:text-blue-400 block"
                     >
                       {tool.name}
-                    </h3>
+                    </Link>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{tool.category}</p>
                   </div>
                   <div className="flex gap-1">
@@ -285,12 +286,12 @@ export default function Home() {
                 </div>
 
                 <div className="flex gap-2 pt-3 border-t border-gray-200 dark:border-gray-700">
-                  <button
-                    onClick={() => setDetailTool(tool)}
-                    className="flex-1 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
+                  <Link
+                    href={`/tools/${tool.slug}`}
+                    className="flex-1 text-center text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
                   >
                     詳細
-                  </button>
+                  </Link>
                   {session && (
                     <>
                       <button
