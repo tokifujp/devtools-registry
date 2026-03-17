@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Share2, Edit, ExternalLink, Github, Copy, Check, X as XIcon, Facebook, Bookmark } from 'lucide-react';
 import { Tool } from '@/types/tool';
 import { useSession } from 'next-auth/react';
+import MarkdownContent from './MarkdownContent';
 
 interface ToolDetailPageProps {
     tool: Tool;
@@ -151,7 +152,9 @@ export default function ToolDetailPage({ tool }: ToolDetailPageProps) {
                         )}
                     </div>
 
-                    <p className="text-gray-700 dark:text-gray-300 mb-6">{tool.description}</p>
+                    <div className="mb-6">
+                        <MarkdownContent content={tool.description} />
+                    </div>
 
                     <div className="flex gap-1 border-b border-gray-200 dark:border-gray-700">
                         <button
@@ -227,8 +230,8 @@ export default function ToolDetailPage({ tool }: ToolDetailPageProps) {
                                                 {inst.configNotes && (
                                                     <div>
                                                         <h4 className="text-sm font-medium mb-2">設定方法</h4>
-                                                        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
-                                                            {inst.configNotes}
+                                                        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+                                                            <MarkdownContent content={inst.configNotes} className="text-sm" />
                                                         </div>
                                                     </div>
                                                 )}
@@ -236,8 +239,8 @@ export default function ToolDetailPage({ tool }: ToolDetailPageProps) {
                                                 {inst.notes && (
                                                     <div>
                                                         <h4 className="text-sm font-medium mb-2">備考</h4>
-                                                        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
-                                                            {inst.notes}
+                                                        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
+                                                            <MarkdownContent content={inst.notes} className="text-sm" />
                                                         </div>
                                                     </div>
                                                 )}
@@ -293,8 +296,8 @@ export default function ToolDetailPage({ tool }: ToolDetailPageProps) {
                                 {tool.usage.tips && (
                                     <div>
                                         <h3 className="text-lg font-semibold mb-3">Tips・小ネタ</h3>
-                                        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
-                                            {tool.usage.tips}
+                                        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                                            <MarkdownContent content={tool.usage.tips} className="text-sm" />
                                         </div>
                                     </div>
                                 )}
@@ -308,8 +311,8 @@ export default function ToolDetailPage({ tool }: ToolDetailPageProps) {
                         {activeTab === 'notes' && (
                             <div>
                                 {tool.notes ? (
-                                    <div className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
-                                        {tool.notes}
+                                    <div className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                                        <MarkdownContent content={tool.notes} />
                                     </div>
                                 ) : (
                                     <p className="text-gray-500 dark:text-gray-400">メモが登録されていません</p>

@@ -9,6 +9,8 @@ import ThemeToggle from '@/components/ThemeToggle';
 import AuthButton from '@/components/AuthButton';
 import ToolModal from '@/components/ToolModal';
 import ToolDetailModal from '@/components/ToolDetailModal';
+import Footer from '@/components/Footer';
+import MarkdownContent from '@/components/MarkdownContent';
 
 export default function Home() {
   const { data: session } = useSession();
@@ -26,6 +28,22 @@ export default function Home() {
   useEffect(() => {
     filterTools();
   }, [tools, searchQuery]);
+
+  useEffect(() => {
+    // URLパラメータから編集対象のIDを取得
+    const params = new URLSearchParams(window.location.search);
+    const editId = params.get('edit');
+
+    if (editId && tools.length > 0) {
+      const toolToEdit = tools.find(t => t.id === editId);
+      if (toolToEdit) {
+        setEditingTool(toolToEdit);
+        setIsModalOpen(true);
+        // URLパラメータをクリア
+        window.history.replaceState({}, '', '/');
+      }
+    }
+  }, [tools]);
 
   const loadTools = async () => {
     try {
@@ -177,34 +195,36 @@ export default function Home() {
           </div>
 
           <div className="flex gap-2">
-            <button
-              onClick={() => session ? setIsModalOpen(true) : signIn()}
-              className="btn-primary flex items-center gap-2"
-              title={session ? 'ツールを追加' : 'ログインしてツールを追加'}
-            >
-              <Plus size={20} />
-              ツール追加
-            </button>
+            {session && (
+              <>
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="btn-primary flex items-center gap-2"
+                >
+                  <Plus size={20} />
+                  ツール追加
+                </button>
 
-            <button
-              onClick={handleExport}
-              className="btn-secondary flex items-center gap-2"
-            >
-              <Download size={20} />
-              エクスポート
-            </button>
+                <button
+                  onClick={handleExport}
+                  className="btn-secondary flex items-center gap-2"
+                >
+                  <Download size={20} />
+                  エクスポート
+                </button>
 
-            <label className={`btn-secondary flex items-center gap-2 ${session ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`}>
-              <Upload size={20} />
-              インポート
-              <input
-                type="file"
-                accept=".json"
-                onChange={handleImport}
-                className="hidden"
-                disabled={!session}
-              />
-            </label>
+                <label className="btn-secondary flex items-center gap-2 cursor-pointer">
+                  <Upload size={20} />
+                  インポート
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={handleImport}
+                    className="hidden"
+                  />
+                </label>
+              </>
+            )}
           </div>
         </div>
 
@@ -213,12 +233,12 @@ export default function Home() {
             <p className="text-lg">
               {searchQuery ? '該当するツールが見つかりません' : 'ツールが登録されていません'}
             </p>
-            {!searchQuery && (
+            {!searchQuery && session && (
               <button
-                onClick={() => session ? setIsModalOpen(true) : signIn()}
+                onClick={() => setIsModalOpen(true)}
                 className="mt-4 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
               >
-                {session ? '最初のツールを追加する' : 'ログインしてツールを追加する'}
+                最初のツールを追加する
               </button>
             )}
           </div>
@@ -271,9 +291,9 @@ export default function Home() {
                   ))}
                 </div>
 
-                <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 line-clamp-2">
-                  {tool.description}
-                </p>
+                <div className="text-sm text-gray-700 dark:text-gray-300 mb-4 line-clamp-2 overflow-hidden">
+                  <MarkdownContent content={tool.description} />
+                </div>
 
                 <div className="mb-4 space-y-1">
                   {tool.installations.map((inst, idx) => (
@@ -314,6 +334,8 @@ export default function Home() {
           </div>
         )}
       </div>
+
+      <Footer />
 
       {isModalOpen && (
         <ToolModal
