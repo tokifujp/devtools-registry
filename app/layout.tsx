@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SessionProvider } from "@/components/SessionProvider";
+import GoogleTagManager from "@/components/GoogleTagManager";
 
 export const metadata: Metadata = {
   title: "DevTools Registry - 開発環境・ツールの記録帳",
@@ -29,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body>
+        <GoogleTagManager />
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>

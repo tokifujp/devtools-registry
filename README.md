@@ -11,6 +11,11 @@
 - 📥 JSON形式でエクスポート/インポート可能
 - 🌙 ダークモード対応
 - 🔐 GitHub/Google OAuth認証（閲覧はPublic、編集は認証必要）
+- 🔗 Permalink対応（`/tools/[slug]`）
+- 🌐 OGP/Twitter Card対応
+- 📤 SNSシェアボタン（X, Facebook, はてなブックマーク, URL copy）
+- 📝 Markdown対応（description, configNotes, tips, notes）
+- 📊 Google Tag Manager (GTM) 対応
 - 🐳 Docker対応
 
 ## クイックスタート
@@ -29,6 +34,7 @@ chmod 777 data
 # macOS: brew install sqlite3
 touch data/dev.db
 sqlite3 data/dev.db < prisma/migrations/20240315000000_init/migration.sql
+sqlite3 data/dev.db < prisma/migrations/20260316000000_add_slug/migration.sql
 
 # 環境変数設定
 cp .env.local.example .env
@@ -57,16 +63,25 @@ npm run dev
 
 ブラウザで `http://localhost:3000` を開く
 
-## OAuth設定
+## 環境変数
 
-### NEXTAUTH_SECRET生成
+### 必須
+```env
+DATABASE_URL="file:./data/dev.db"
+NEXTAUTH_URL=https://your-domain.com
+NEXTAUTH_SECRET=（openssl rand -base64 32で生成）
+```
+
+### OAuth認証
+
+#### NEXTAUTH_SECRET生成
 ```bash
 openssl rand -base64 32
 ```
 
 生成された文字列を `.env` の `NEXTAUTH_SECRET` に設定
 
-### GitHub OAuth設定
+#### GitHub OAuth設定
 
 1. https://github.com/settings/developers にアクセス
 2. "New OAuth App" をクリック
@@ -79,7 +94,7 @@ openssl rand -base64 32
 6. "Generate a new client secret" をクリック
 7. Client secretをコピーして `.env` の `GITHUB_SECRET` に設定
 
-### Google OAuth設定
+#### Google OAuth設定
 
 1. https://console.cloud.google.com/ にアクセス
 2. プロジェクトを作成または選択
@@ -93,24 +108,7 @@ openssl rand -base64 32
 8. クライアントIDを `.env` の `GOOGLE_ID` に設定
 9. クライアントシークレットを `.env` の `GOOGLE_SECRET` に設定
 
-## 使い方
-
-### 閲覧（認証不要）
-
-- すべてのツール情報を自由に閲覧可能
-- 検索機能も利用可能
-
-### ツール登録・編集・削除（認証必要）
-
-1. 右上の「ログイン」ボタンをクリック
-2. GitHub または Google でログイン
-3. 「ツール追加」ボタンから登録
-4. 基本情報を入力（名前、カテゴリ、タグなど）
-5. OS別のインストール情報を追加
-6. よく使うコマンドやTipsを記録
-7. 保存
-
-### メールアドレス制限
+#### メールアドレス制限
 
 特定のユーザーだけに編集権限を付与できます。
 
@@ -127,6 +125,53 @@ ALLOWED_EMAILS=user1@gmail.com,user2@example.com,user3@company.com
 - `ALLOWED_EMAILS` が空の場合、すべてのOAuthユーザーがログインできます（開発用）
 - 本番環境では必ず設定することを推奨
 - GitHub/Google どちらの認証方法でも、このメールアドレスでチェックされます
+
+### オプション
+
+#### Google Tag Manager (GTM)
+```env
+NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
+```
+
+GTMコンテナIDを設定すると、Google Tag Managerが自動的に埋め込まれます。
+設定しない場合は何も読み込まれません。
+
+## 機能
+
+### 閲覧（認証不要）
+
+- すべてのツール情報を自由に閲覧可能
+- 検索機能も利用可能
+- Permalink経由でのアクセス（`/tools/[slug]`）
+- SNSシェア機能
+
+### ツール登録・編集・削除（認証必要）
+
+1. 右上の「ログイン」ボタンをクリック
+2. GitHub または Google でログイン
+3. 「ツール追加」ボタンから登録
+4. 基本情報を入力（名前、カテゴリ、タグなど）
+5. OS別のインストール情報を追加
+6. よく使うコマンドやTipsを記録
+7. 保存
+
+### Markdown対応
+
+以下のフィールドでMarkdown記法が使用できます：
+- 概要・用途（description）
+- 設定方法（configNotes）
+- 備考（Installation notes）
+- Tips・小ネタ（tips）
+- メモ（notes）
+
+サポートされるMarkdown記法：
+- 見出し（`#`, `##`, `###`）
+- **太字**、*イタリック*
+- リスト（`-`, `1.`）
+- リンク（`[text](url)`）
+- インラインコード（`` `code` ``）
+- コードブロック（` ``` `）
+- テーブル（GitHub Flavored Markdown）
 
 ### データ管理
 
@@ -167,6 +212,8 @@ docker compose up -d --build
 - Tailwind CSS (ダークモード対応)
 - Prisma + SQLite
 - NextAuth.js (GitHub/Google OAuth)
+- react-markdown + remark-gfm (Markdown rendering)
+- @tailwindcss/typography (Markdown styling)
 - Docker / Docker Compose
 
 ## ライセンス
