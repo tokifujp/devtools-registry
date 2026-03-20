@@ -7,7 +7,7 @@
 - 📝 ツールごとにOS別のインストール方法を記録
 - 💻 よく使うコマンド・Usageを登録
 - 🏷️ タグやカテゴリで分類・検索
-- 💾 SQLiteで永続化
+- ☁️ Turso (libsql) でクラウドDB永続化
 - 📥 JSON形式でエクスポート/インポート可能
 - 🌙 ダークモード対応
 - 🔐 GitHub/Google OAuth認証（閲覧はPublic、編集は認証必要）
@@ -25,20 +25,9 @@
 git clone https://github.com/tokifujp/devtools-registry.git
 cd devtools-registry
 
-# データディレクトリ作成と権限設定
-mkdir data
-chmod 777 data
-
-# DBファイル初期化（sqlite3が必要）
-# Ubuntu/Debian: sudo apt install sqlite3
-# macOS: brew install sqlite3
-touch data/dev.db
-sqlite3 data/dev.db < prisma/migrations/20240315000000_init/migration.sql
-sqlite3 data/dev.db < prisma/migrations/20260316000000_add_slug/migration.sql
-
 # 環境変数設定
 cp .env.local.example .env
-# .envファイルを編集してOAuth情報を設定
+# .envファイルを編集してTurso・OAuth情報を設定
 
 # 起動
 docker compose up -d
@@ -54,8 +43,11 @@ npm install
 cp .env.local.example .env.local
 # .env.localファイルを編集
 
-# DB初期化
-npx prisma migrate dev
+# ローカルDBを使う場合（ファイルDB）
+# TURSO_DATABASE_URL="file:local.db" のまま
+
+# DBスキーマ適用（初回のみ）
+npx prisma migrate deploy
 
 # 開発サーバー起動
 npm run dev
@@ -67,9 +59,37 @@ npm run dev
 
 ### 必須
 ```env
-DATABASE_URL="file:./data/dev.db"
+# Turso / libsql データベース
+# ローカル開発（ファイルDB）
+TURSO_DATABASE_URL="file:local.db"
+
+# 本番（Turso Cloud）
+# TURSO_DATABASE_URL="libsql://your-db-name.turso.io"
+# TURSO_AUTH_TOKEN="your-turso-auth-token"
+
 NEXTAUTH_URL=https://your-domain.com
 NEXTAUTH_SECRET=（openssl rand -base64 32で生成）
+```
+
+### Turso Cloud セットアップ
+
+```bash
+# Turso CLI インストール
+curl -sSfL https://get.tur.so/install.sh | bash
+
+# ログイン
+turso auth login
+
+# DB作成
+turso db create devtools-registry
+
+# 接続URLとトークン取得
+turso db show devtools-registry --url
+turso db tokens create devtools-registry
+
+# スキーマ適用（prisma migrate deployはTurso非対応のため直接実行）
+turso db shell devtools-registry < prisma/migrations/20240315000000_init/migration.sql
+turso db shell devtools-registry < prisma/migrations/20260316102822_add_slug/migration.sql
 ```
 
 ### OAuth認証
@@ -201,16 +221,12 @@ docker compose logs -f
 docker compose up -d --build
 ```
 
-## データの永続化
-
-`./data/dev.db` にSQLiteデータベースが保存されます。このディレクトリをバックアップしてください。
-
 ## 技術スタック
 
 - Next.js 15 (App Router)
 - TypeScript
 - Tailwind CSS (ダークモード対応)
-- Prisma + SQLite
+- Prisma + Turso (libsql) / [@prisma/adapter-libsql](https://www.prisma.io/docs/orm/overview/databases/turso)
 - NextAuth.js (GitHub/Google OAuth)
 - react-markdown + remark-gfm (Markdown rendering)
 - @tailwindcss/typography (Markdown styling)
