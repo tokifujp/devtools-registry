@@ -1,4 +1,5 @@
 FROM node:20-slim AS base
+RUN apt-get update && apt-get install -y --no-install-recommends openssl && rm -rf /var/lib/apt/lists/*
 
 FROM base AS deps
 WORKDIR /app
