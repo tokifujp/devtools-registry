@@ -9,9 +9,8 @@ services:
       - "3002:3000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=file:/app/data/dev.db
-      - PRISMA_QUERY_ENGINE_LIBRARY=/app/node_modules/.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.so.node
-      - PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
+      - TURSO_DATABASE_URL=${TURSO_DATABASE_URL}
+      - TURSO_AUTH_TOKEN=${TURSO_AUTH_TOKEN}
       - NEXTAUTH_URL=${NEXTAUTH_URL}
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - ALLOWED_EMAILS=${ALLOWED_EMAILS}
@@ -19,8 +18,6 @@ services:
       - GITHUB_SECRET=${GITHUB_SECRET}
       - GOOGLE_ID=${GOOGLE_ID}
       - GOOGLE_SECRET=${GOOGLE_SECRET}
-    volumes:
-      - ./data:/app/data
     healthcheck:
       test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000" ]
       interval: 30s
