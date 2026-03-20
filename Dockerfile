@@ -1,7 +1,6 @@
 FROM node:20-alpine AS base
 
 FROM base AS deps
-RUN apk add --no-cache libc6-compat openssl-dev
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
@@ -20,8 +19,6 @@ RUN npm run build
 
 FROM base AS runner
 WORKDIR /app
-
-RUN apk add --no-cache openssl-dev
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -45,6 +42,5 @@ EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
-ENV DATABASE_URL="file:/app/data/dev.db"
 
 CMD ["node", "server.js"]
