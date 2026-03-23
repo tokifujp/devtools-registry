@@ -10,7 +10,7 @@ export default function AuthButton() {
     return (
       <div className="flex items-center gap-2 px-4 py-2 text-gray-400">
         <User size={20} />
-        読み込み中...
+        <span className="hidden sm:inline">読み込み中...</span>
       </div>
     );
   }
@@ -35,7 +35,7 @@ export default function AuthButton() {
           className="flex items-center gap-2 px-3 py-2 text-sm bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors"
         >
           <LogOut size={16} />
-          ログアウト
+          <span className="hidden sm:inline">ログアウト</span>
         </button>
       </div>
     );
@@ -47,7 +47,7 @@ export default function AuthButton() {
       className="flex items-center gap-2 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
     >
       <LogIn size={20} />
-      ログイン
+      <span className="hidden sm:inline">ログイン</span>
     </button>
   );
 }
