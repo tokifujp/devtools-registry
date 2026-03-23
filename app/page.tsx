@@ -167,11 +167,11 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen p-8">
+    <main className="min-h-screen p-4 sm:p-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8 flex justify-between items-start">
           <div>
-            <h1 className="text-4xl font-bold mb-2">DevTools Registry</h1>
+            <h1 className="text-2xl sm:text-4xl font-bold mb-2">DevTools Registry</h1>
             <p className="text-gray-600 dark:text-gray-400">開発環境・ツールの記録帳</p>
           </div>
           <div className="flex items-center gap-3">
@@ -181,7 +181,7 @@ export default function Home() {
         </div>
 
         <div className="mb-6 flex flex-wrap gap-4 items-center">
-          <div className="flex-1 min-w-[300px]">
+          <div className="flex-1 min-w-0">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
               <input
@@ -202,7 +202,7 @@ export default function Home() {
                   className="btn-primary flex items-center gap-2"
                 >
                   <Plus size={20} />
-                  ツール追加
+                  <span className="hidden sm:inline">ツール追加</span>
                 </button>
 
                 <button
@@ -210,12 +210,12 @@ export default function Home() {
                   className="btn-secondary flex items-center gap-2"
                 >
                   <Download size={20} />
-                  エクスポート
+                  <span className="hidden sm:inline">エクスポート</span>
                 </button>
 
                 <label className="btn-secondary flex items-center gap-2 cursor-pointer">
                   <Upload size={20} />
-                  インポート
+                  <span className="hidden sm:inline">インポート</span>
                   <input
                     type="file"
                     accept=".json"

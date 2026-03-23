@@ -29,6 +29,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `(function(){if(localStorage.getItem('theme')!=='light'){document.documentElement.classList.add('dark');}})();` }} />
+      </head>
       <body>
         <GoogleTagManager />
         <SessionProvider>{children}</SessionProvider>
