@@ -1,15 +1,30 @@
 import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
 import { prisma } from '@/lib/db';
-import { Tool } from '@/types/tool';
+import { authOptions } from '@/lib/auth';
+import { ToolSchema } from '@/lib/validations';
 import { generateUniqueSlug } from '@/lib/slugify';
 
 export async function PUT(
   request: Request,
   context: { params: Promise<{ id: string }> }
 ) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const { id } = await context.params;
-    const tool: Tool = await request.json();
+    const body = await request.json();
+    const result = ToolSchema.safeParse(body);
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Invalid input', details: result.error.flatten() },
+        { status: 400 }
+      );
+    }
+    const tool = result.data;
 
     // 名前が変更された場合はslugも更新
     const slug = generateUniqueSlug(tool.name, tool.id);
@@ -41,6 +56,11 @@ export async function DELETE(
   request: Request,
   context: { params: Promise<{ id: string }> }
 ) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const { id } = await context.params;
 

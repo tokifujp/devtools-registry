@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
 import { prisma } from '@/lib/db';
-import { Tool } from '@/types/tool';
+import { authOptions } from '@/lib/auth';
+import { ToolSchema } from '@/lib/validations';
 import { generateUniqueSlug } from '@/lib/slugify';
 
 export async function GET() {
@@ -24,8 +26,21 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
-    const tool: Tool = await request.json();
+    const body = await request.json();
+    const result = ToolSchema.safeParse(body);
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Invalid input', details: result.error.flatten() },
+        { status: 400 }
+      );
+    }
+    const tool = result.data;
 
     // slugを生成（IDを使って一意性を保証）
     const slug = generateUniqueSlug(tool.name, tool.id);
