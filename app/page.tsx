@@ -186,6 +186,8 @@ export default function Home() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
               <input
                 type="text"
+                id="search"
+                name="search"
                 placeholder="ツール名、カテゴリ、OS、タグで検索..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
